@@ -1,0 +1,91 @@
+﻿@using System.Net.Http
+@inherits MainLayout
+@using WebInterface.DTO 
+@inject HttpClient Http  
+@page "/"
+<button @onclick="@NewData">Generate</button>
+<DataGrid TItem="ErrorData"
+        Data="@errors"
+        ReadData="@OnReadData"
+        TotalItems="@totalEmployees">
+    <DataGridCommandColumn TItem="ErrorData" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Date)" Caption="Date" Sortable="true" Editable="false"/>
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.ErrorCode)" Caption="Error Code" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.OS)" Caption="Operating System" Sortable="true" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Path)" Caption="Path" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Message)" Caption="Message" Editable="false" />
+</DataGrid>
+@code{
+
+    LineChart<double> lineChart;
+
+    public ErrorData[] err;
+
+    //protected override async Task OnInitializedAsync() =>
+    //    err = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:44362/api/Error/25");
+
+    ErrorData[] errors;
+    int totalEmployees;
+
+    async void NewData()
+    {
+        var r = await Http.GetStringAsync("https://localhost:5001/api/Error/25");
+        r = r.Substring(1, r.Length - 2);
+        var lines = r.Split(',');
+        errors = new ErrorData[lines.Count()];
+        for (int index = 0; index < lines.Count(); index++)
+        {
+            errors[index] = new ErrorData(lines[index]);
+        }
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    async Task OnReadData(DataGridReadDataEventArgs<ErrorData> e)
+    {
+        // this can be call to anything, in this case we're calling a fictional api
+        //var response = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:5001/api/ErrorJson/10");
+        var r = await Http.GetStringAsync("https://localhost:5001/api/Error/25");
+        r = r.Substring(1, r.Length - 2);
+        var lines = r.Split(',');
+        errors = new ErrorData[lines.Count()];
+        for (int index = 0; index < lines.Count(); index++)
+        {
+            errors[index] = new ErrorData(lines[index]);
+        }
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    async Task HandleRedraw()
+    {
+        await lineChart.Clear();
+
+        await lineChart.AddLabelsDatasetsAndUpdate(Labels, GetLineChartDataset());
+    }
+
+    LineChartDataset<double> GetLineChartDataset()
+    {
+        return new LineChartDataset<double>
+        {
+            Label = "# of randoms",
+            Data = RandomizeData(),
+            BackgroundColor = backgroundColors,
+            BorderColor = borderColors,
+            Fill = true,
+            PointRadius = 2,
+            BorderDash = new List<int> { }
+        };
+    }
+
+    string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
+    List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
+    List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
+
+    List<double> RandomizeData()
+    {
+        var r = new Random(DateTime.Now.Millisecond);
+
+        return new List<double> { r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble(), r.Next(3, 50) * r.NextDouble() };
+    }
+}
