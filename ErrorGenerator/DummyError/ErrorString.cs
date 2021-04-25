@@ -9,7 +9,7 @@ namespace ErrorGenerator.DummyError
         public static int Range { get; set; } = (DateTime.Today - Start).Days;
         private static Random Rng { get; set; } = new Random(); // Naming violation???
 
-        private static readonly string[] _drive = new string[] { 
+        private static readonly string[] _drive = new string[] {
             "C:",
             "D:",
             "E:",
@@ -59,31 +59,32 @@ namespace ErrorGenerator.DummyError
             "Win7"
         };
 
-        private static readonly string[] _messages = new string[] { 
+        private static readonly string[] _messages = new string[] {
             "API_Error:",
             "NullReferenceError",
             "Request Timeout"
 
         };
 
-        private static readonly int[] _htmlEC = new int[] { 
+        private static readonly int[] _htmlEC = new int[] {
             100,101,203,204,205,206,300,301,302,303,304,305,400,401,402,403,
             404,405,406,407,408,409,410,411,412,413,414,415,418,500,501,502,503,504,505
         };
 
         private static byte[] _codeArray => new byte[5] { (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256) };
         public static string Path => _drive[Rng.Next(_drive.Length)] + _firstIndex[Rng.Next(_firstIndex.Length)] + _secondIndex[Rng.Next(_secondIndex.Length)] + _thirdIndex[Rng.Next(_thirdIndex.Length)];
-
+        public static string RandIP => $"{Rng.Next(60,200)}.{Rng.Next(70,255)}.{Rng.Next(100)}.{Rng.Next(255)}";
         public static string Message => _messages[Rng.Next(_messages.Length)];
         public static string OS => _os[Rng.Next(_os.Length)];
         public static DateTime Date => Start.AddDays(Rng.Next(Range)).AddHours(Rng.Next(0, 24)).AddMinutes(Rng.Next(0, 60)).AddSeconds(Rng.Next(0, 60));
         public static int HTMLError => _htmlEC[Rng.Next(_htmlEC.Length)];
         public static string EC => BitConverter.ToString(_codeArray).Replace("-", ".");
+        public static int Severity => Rng.Next(5);
 
         public static string FullError()
         {
             string msg = Message;
-            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}";
+            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}|{RandIP}|{Severity}";
         }
 
         public static string FullErrorJson()

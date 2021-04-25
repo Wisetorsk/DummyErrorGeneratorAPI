@@ -3,12 +3,16 @@
 @using Blazorise.DataGrid
 
 <button @onclick="@NewData">Generate</button>
+<div>Critical errors: @CriticalErrors</div>
+<div>Warnings: @WarningErrors</div>
 <DataGrid TItem="ErrorData"
           Data="@errors"
           ReadData="@OnReadData"
-          TotalItems="@totalEmployees">
+          RowStyling="@OnRowStyling"
+          SelectedRowStyling="@OnSelectedRowStyling">
     <DataGridCommandColumn TItem="ErrorData" />
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Date)" Caption="Date" Sortable="true" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.IP)" Caption="IP Adress" Editable="false" />
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.ErrorCode)" Caption="Error Code" Editable="false" />
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.OS)" Caption="Operating System" Sortable="true" />
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Path)" Caption="Path" Editable="false" />
@@ -22,7 +26,14 @@
     //    err = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:44362/api/Error/25");
 
     ErrorData[] errors;
-    int totalEmployees;
+    int CriticalErrors = 0;
+    int WarningErrors = 0;
+
+    void SelectedError()
+    {
+
+    }
+
 
     async void NewData()
     {
@@ -35,6 +46,7 @@
             errors[index] = new ErrorData(lines[index]);
         }
         // always call StateHasChanged!
+        UpdateWarningCount();
         StateHasChanged();
     }
 
@@ -51,6 +63,43 @@
             errors[index] = new ErrorData(lines[index]);
         }
         // always call StateHasChanged!
+        UpdateWarningCount();
         StateHasChanged();
     }
+    void UpdateWarningCount()
+    {
+        CriticalErrors = errors.Where(i => i.ErrorLevel == Severity.Critical).Count();
+        WarningErrors = errors.Where(i => i.ErrorLevel == Severity.Warning).Count();
+    }
+
+    void OnRowStyling(ErrorData err, DataGridRowStyling styling)
+    {
+        switch (err.ErrorLevel)
+        {
+            case Severity.Critical:
+                styling.Style = "background-color: red; font-weight: bold; border: 1px solid black;";
+                break;
+            case Severity.Priority_1:
+                styling.Style = "background-color: orange;";
+                break;
+            case Severity.Priority_2:
+                styling.Style = "background-color: orange;";
+                break;
+            case Severity.Warning:
+                styling.Style = "background-color: yellow;";
+                break;
+            case Severity.Nominal:
+                styling.Style = "background-color: green;";
+                break;
+            default:
+                break;
+        }
+    }
+
+    void OnSelectedRowStyling(ErrorData err, DataGridRowStyling styling)
+    {
+        styling.Style = "border: 2px solid black; box-shadow: 2px 2px 4px #000000;";
+    }
+
+
 }
