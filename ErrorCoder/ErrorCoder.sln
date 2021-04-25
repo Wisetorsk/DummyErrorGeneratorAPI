@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorCoder", "ErrorCoder.cs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorGenerator", "..\ErrorGenerator\ErrorGenerator.csproj", "{C3886CE6-E9F4-47AF-8BBC-49464BEEF77E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorAPI", "..\ErrorAPI\ErrorAPI.csproj", "{D43A7B00-7689-42D5-9AC7-1F0281757B4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ErrorAPI", "..\ErrorAPI\ErrorAPI.csproj", "{D43A7B00-7689-42D5-9AC7-1F0281757B4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebInterface", "..\WebInterface\WebInterface.csproj", "{2CE21C62-0D29-4A9C-A16D-C86137421087}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebInterface", "..\WebInterface\WebInterface.csproj", "{2CE21C62-0D29-4A9C-A16D-C86137421087}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorGenerator.Components", "..\ErrorGenerator.Components\ErrorGenerator.Components.csproj", "{48979646-CAD9-4DDC-B524-7854FDFE952B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2CE21C62-0D29-4A9C-A16D-C86137421087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE21C62-0D29-4A9C-A16D-C86137421087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE21C62-0D29-4A9C-A16D-C86137421087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48979646-CAD9-4DDC-B524-7854FDFE952B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48979646-CAD9-4DDC-B524-7854FDFE952B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48979646-CAD9-4DDC-B524-7854FDFE952B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48979646-CAD9-4DDC-B524-7854FDFE952B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

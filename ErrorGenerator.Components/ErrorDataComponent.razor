@@ -1,0 +1,56 @@
+﻿@using System.Net.Http
+@inject HttpClient Http
+@using Blazorise.DataGrid
+
+<button @onclick="@NewData">Generate</button>
+<DataGrid TItem="ErrorData"
+          Data="@errors"
+          ReadData="@OnReadData"
+          TotalItems="@totalEmployees">
+    <DataGridCommandColumn TItem="ErrorData" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Date)" Caption="Date" Sortable="true" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.ErrorCode)" Caption="Error Code" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.OS)" Caption="Operating System" Sortable="true" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Path)" Caption="Path" Editable="false" />
+    <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Message)" Caption="Message" Editable="false" />
+</DataGrid>
+
+@code {
+    public ErrorData[] err;
+
+    //protected override async Task OnInitializedAsync() =>
+    //    err = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:44362/api/Error/25");
+
+    ErrorData[] errors;
+    int totalEmployees;
+
+    async void NewData()
+    {
+        var r = await Http.GetStringAsync("https://localhost:5001/api/Error/25");
+        r = r.Substring(1, r.Length - 2);
+        var lines = r.Split(',');
+        errors = new ErrorData[lines.Count()];
+        for (int index = 0; index < lines.Count(); index++)
+        {
+            errors[index] = new ErrorData(lines[index]);
+        }
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+
+    async Task OnReadData(DataGridReadDataEventArgs<ErrorData> e)
+    {
+        // this can be call to anything, in this case we're calling a fictional api
+        //var response = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:5001/api/ErrorJson/10");
+        var r = await Http.GetStringAsync("https://localhost:5001/api/Error/25");
+        r = r.Substring(1, r.Length - 2);
+        var lines = r.Split(',');
+        errors = new ErrorData[lines.Count()];
+        for (int index = 0; index < lines.Count(); index++)
+        {
+            errors[index] = new ErrorData(lines[index]);
+        }
+        // always call StateHasChanged!
+        StateHasChanged();
+    }
+}
