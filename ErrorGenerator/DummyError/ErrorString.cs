@@ -60,7 +60,7 @@ namespace ErrorGenerator.DummyError
         };
 
         private static readonly string[] _messages = new string[] {
-            "API_Error:",
+            "API_Error",
             "NullReferenceError",
             "Request Timeout"
 
@@ -85,14 +85,14 @@ namespace ErrorGenerator.DummyError
         public static string FullError()
         {
             string msg = Message;
-            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}|{RandIP}|{Severity}|{Comment}";
+            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error") ? $"API_Error {HTMLError}" : msg)}|{RandIP}|{Severity}|{Comment}";
         }
 
         public static string FullErrorJson()
         {
             string msg = Message;
             
-            string jsonError = $"{{\"Date\":{Date}, \"ErrorCode\":{EC}, \"OS\":{OS}, \"Path\":{Path}, \"Message\":{ ((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}}}";
+            string jsonError = $"{{\"Date\":{Date}, \"ErrorCode\":{EC}, \"OS\":{OS}, \"Path\":{Path}, \"Message\":{ ((msg == "API_Error") ? $"API_Error {HTMLError}" : msg)}}}";
             return jsonError;
         }
 
@@ -100,7 +100,7 @@ namespace ErrorGenerator.DummyError
         {
             string msg = Message;
 
-            string jsonError = $"{{'Date':{Date}, 'ErrorCode':{EC}, 'OS':{OS}, 'Path':{Path}, 'Message':{ ((msg == "API_Error:") ? $"API_Error {HTMLError}" : msg)}}}";
+            string jsonError = $"{{'Date':{Date}, 'ErrorCode':{EC}, 'OS':{OS}, 'Path':{Path}, 'Message':{ ((msg == "API_Error") ? $"API_Error {HTMLError}" : msg)}}}";
             return jsonError;
         }
 
