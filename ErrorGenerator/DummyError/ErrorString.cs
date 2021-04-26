@@ -71,6 +71,7 @@ namespace ErrorGenerator.DummyError
             404,405,406,407,408,409,410,411,412,413,414,415,418,500,501,502,503,504,505
         };
 
+        public static string Comment { get; set; } = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt neque nec ante eleifend auctor. Quisque ultricies sed purus vel blandit. In et dapibus diam, ac faucibus felis. Integer vehicula condimentum condimentum. Proin vitae urna eu nulla auctor sollicitudin ut ut sem. Aliquam euismod placerat neque, eu tristique orci molestie sodales. Sed consectetur lorem ornare felis tristique, ut venenatis ex lobortis. Duis consectetur urna tortor, at vestibulum magna tristique vel. Suspendisse tempor orci in eros malesuada pellentesque. Donec facilisis nisl eu libero pretium tristique. Praesent at laoreet leo. Nam volutpat bibendum dictum. Nunc vehicula iaculis nisl ac molestie. Praesent nec orci leo. Suspendisse eros eros, iaculis vel scelerisque ac, suscipit at ipsum. Mauris eget tortor facilisis, venenatis ipsum ut, tempor diam.".Replace(",", "&#44");
         private static byte[] _codeArray => new byte[5] { (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256), (byte)Rng.Next(256) };
         public static string Path => _drive[Rng.Next(_drive.Length)] + _firstIndex[Rng.Next(_firstIndex.Length)] + _secondIndex[Rng.Next(_secondIndex.Length)] + _thirdIndex[Rng.Next(_thirdIndex.Length)];
         public static string RandIP => $"{Rng.Next(60,200)}.{Rng.Next(70,255)}.{Rng.Next(100)}.{Rng.Next(255)}";
@@ -84,7 +85,7 @@ namespace ErrorGenerator.DummyError
         public static string FullError()
         {
             string msg = Message;
-            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}|{RandIP}|{Severity}";
+            return $"{Date}|{EC}|{OS}|{Path}|{((msg == "API_Error:") ? $"API_Error: {HTMLError}" : msg)}|{RandIP}|{Severity}|{Comment}";
         }
 
         public static string FullErrorJson()

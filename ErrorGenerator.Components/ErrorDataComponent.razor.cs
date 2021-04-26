@@ -16,6 +16,7 @@ namespace ErrorGenerator.Components
         public string Path { get; set; }
         public string IP { get; set; }
         public Severity ErrorLevel { get; set; }
+        public string AdditionalComments { get; set; }
 
         public ErrorData(string line)
         {
@@ -28,6 +29,11 @@ namespace ErrorGenerator.Components
             Path = elements[3];
             IP = elements[5];
             ErrorLevel = (Severity)int.Parse(elements[6]);
+            AdditionalComments = elements[7];
+        }
+        public ErrorData()
+        {
+
         }
     }
 

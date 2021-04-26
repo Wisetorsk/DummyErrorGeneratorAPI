@@ -1,6 +1,8 @@
 ﻿@using System.Net.Http
 @inject HttpClient Http
+@using Blazorise
 @using Blazorise.DataGrid
+@using Blazorise.Components
 
 <button @onclick="@NewData">Generate</button>
 <div>Critical errors: @CriticalErrors</div>
@@ -9,6 +11,8 @@
           Data="@errors"
           ReadData="@OnReadData"
           RowStyling="@OnRowStyling"
+          RowClicked="@ShowModal"
+          @bind-SelectedRow="@_currentlySelectedError"
           SelectedRowStyling="@OnSelectedRowStyling">
     <DataGridCommandColumn TItem="ErrorData" />
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Date)" Caption="Date" Sortable="true" Editable="false" />
@@ -19,11 +23,72 @@
     <DataGridColumn TItem="ErrorData" Field="@nameof(ErrorData.Message)" Caption="Message" Editable="false" />
 </DataGrid>
 
+<Modal @ref="modalRef">
+    <ModalContent Centered="true" Size="ModalSize.ExtraLarge">
+        <ModalHeader>
+            <ModalTitle>Error no NUMBER</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Error Date</FieldLabel>
+                <Text>@_currentlySelectedError.Date</Text>
+            </Field>
+            <Field>
+                <FieldLabel>Error Code</FieldLabel>
+                <Text>@_currentlySelectedError.ErrorCode</Text>
+            </Field>
+            <Field>
+                <FieldLabel>Message</FieldLabel>
+                <Text>@_currentlySelectedError.Message</Text>
+            </Field>
+            <Field>
+                <FieldLabel>IP adress</FieldLabel>
+                <Text>@_currentlySelectedError.IP</Text>
+            </Field>
+            <Field>
+                <FieldLabel>Path</FieldLabel>
+                <Text>@_currentlySelectedError.Path</Text>
+            </Field>
+            <Field>
+                <FieldLabel>Additional text</FieldLabel>
+                <Text>@_currentlySelectedError.AdditionalComments</Text>
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Blazorise.Color.Secondary" Clicked="@HideModal">Close</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
 @code {
     public ErrorData[] err;
 
-    //protected override async Task OnInitializedAsync() =>
-    //    err = await Http.GetFromJsonAsync<ErrorData[]>("https://localhost:44362/api/Error/25");
+    private ErrorData _currentlySelectedError = new ErrorData
+    {
+        OS = "DEFAULT",
+        Date = "Default",
+        ErrorCode = "DEFAULT",
+        Message = "DEFAULT",
+        Path = "DEFAULT",
+        IP = "DEFAULT",
+        ErrorLevel = Severity.Nominal
+    };
+
+    private Modal modalRef;
+    
+
+    private void ShowModal()
+    {
+        
+        modalRef.Show();
+    }
+
+    private void HideModal()
+    {
+        modalRef.Hide();
+    }
 
     ErrorData[] errors;
     int CriticalErrors = 0;
